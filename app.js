@@ -2,7 +2,18 @@ var path = require("path");
 var express = require("express");
 var app = express();
 
+var db = require("./model/connect.js");
+
+db.connect().then(function(db){
+     global.db = db;
+}).catch(function(err){
+    console.log(err);
+})
+
 var swig = require("swig");
+
+app.set('view cache', false);
+swig.setDefaults({ cache: false });
 
 //设置静态目录
 app.use(express.static(__dirname + '/static'));
@@ -13,35 +24,9 @@ app.set('view engine', 'html');
 
 app.engine("html",swig.renderFile);
 
-//连接mongodb
 
-var mongodb = require("mongodb");
-var server = mongodb.server;
-var MongoClient = mongodb.MongoClient;
 
-var url = 'mongodb://localhost:27017/messageBoard';
 
-MongoClient.connect(url, function(err, db) {
-
-    if(err){
-        console.log(errr);
-    }
-
-    db.collection("col").insert({"a":1},function(err,result){
-        console.log(err,result);
-    });
-
-    db.collection("col").findOne({},function (err,data) {
-        if(err){
-            console.log(err);
-        }
-        console.log("data:"+data);
-    })
-
-    console.log("正确连接数据库");
-
-    db.close();
-});
 
 
 

@@ -11,8 +11,12 @@ router.get("/",function (req,res) {
     res.render("index",{hello:"abc"});
 });
 
-router.get("/home",function (req,res) {
-    res.send("hello,home");
+router.get("/login",function (req,res) {
+    res.render("login",{hello:"abc"});
+});
+
+router.get("/reg",function (req,res) {
+    res.render("reg",{hello:"abc"});
 });
 
 module.exports = router;

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery-3.1.1.min.js"></script>
+</head>
+<body>
+    <h1>登录页</h1>
+    用户名：<input type="text" id="userName"/>
+    密码：<input type="password" id="password" />
+    <input type="button" value="登录"  id="login"/>
+
+    <script>
+
+        var data = {
+            userName: $("#userName").val(),
+            password: $("#password").val()
+        }
+
+        $("#login").on("click",function(){
+            console.log("false");
+            $.ajax({
+                url:"/api/login",
+                data:data,
+                success: function(data){
+                    console.log(data);
+                },
+                error:function(){
+
+                }
+            })
+        });
+
+    </script>
+
+</body>
+</html>
