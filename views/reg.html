@@ -7,7 +7,7 @@
 </head>
 <body>
 <h1>登录页</h1>
-用户名：<input type="text" id="userName"/>
+用户名：<input type="text" id="userName"/><span id="tip"></span>
 密码：<input type="password" id="password" />
 <input type="button" value="注册"  id="login"/>
 
@@ -24,7 +24,11 @@
             url:"/api/reg",
             data:data,
             success: function(data){
-                console.log(data);
+                if( data.status === 0 ){  //注册成功
+                    window.location.href = "/login";
+                }else{
+                    $("#tip").text("用户已经存在");
+                }
             },
             error:function(){
 

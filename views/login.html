@@ -13,13 +13,13 @@
 
     <script>
 
-        var data = {
-            userName: $("#userName").val(),
-            password: $("#password").val()
-        }
+
 
         $("#login").on("click",function(){
-            console.log("false");
+            var data = {
+                userName: $("#userName").val(),
+                password: $("#password").val()
+            }
             $.ajax({
                 url:"/api/login",
                 data:data,
