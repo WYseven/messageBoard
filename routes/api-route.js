@@ -5,20 +5,33 @@ var express = require("express");
 var router = express.Router();
 
 
-router.get("/login",function(req,res){
-    var userName = req.query.userName;
+//登录API请求
+router.post("/login",function(req,res){
+    var userName = req.body.userName;
     var usersColletion =  db.collection("user");
 
     usersColletion.findOne({userName:userName},function(err,data){
         if( err ) throw err;
-        res.json({
-            status: 1,
-            message:"已经存在"
-        });
+        if(data){
+            res.setHeader("Set-Cookie",'mb-userName='+userName + ";domain=localhost;path=/;expires=" + new Date(2016,12,12).toUTCString());
+            res.json({
+                status: 0,
+                message:"可以登录"
+            });
+        }else{
+            res.json({
+                status: 1,
+                message:"用户不存在"
+            });
+        }
+
     })
 })
-router.get("/reg",function (req,res) {
-    var userName = req.query.userName;
+
+//注册API请求
+
+router.post("/reg",function (req,res) {
+    var userName = req.body.userName;
     var usersColletion =  db.collection("user");
     usersColletion.findOne({userName:userName},function(err,data){
         if( err ){

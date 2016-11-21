@@ -19,4 +19,14 @@ router.get("/reg",function (req,res) {
     res.render("reg",{hello:"abc"});
 });
 
+router.get("/users-list",function (req,res) {
+    console.log(req.cookies);
+    var usersColletion =  db.collection("user");
+    usersColletion.find().toArray(function(err,data){
+        if(err) throw err;
+        res.render("users-list",{list:data});
+    })
+
+});
+
 module.exports = router;

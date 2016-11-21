@@ -23,6 +23,7 @@
         $.ajax({
             url:"/api/reg",
             data:data,
+            method:"post",
             success: function(data){
                 if( data.status === 0 ){  //注册成功
                     window.location.href = "/login";

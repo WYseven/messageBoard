@@ -12,9 +12,6 @@
     <input type="button" value="登录"  id="login"/>
 
     <script>
-
-
-
         $("#login").on("click",function(){
             var data = {
                 userName: $("#userName").val(),
@@ -23,8 +20,13 @@
             $.ajax({
                 url:"/api/login",
                 data:data,
+                method:"post",
                 success: function(data){
-                    console.log(data);
+                    if( data.status === 0 ){
+                        //window.location.href = "/users-list"
+                    }else{
+                        console.log(data.message);
+                    }
                 },
                 error:function(){
 
