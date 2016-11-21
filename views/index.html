@@ -3,19 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script>
-
-    </script>
+    <script src="jquery-3.1.1.min.js"></script>
 </head>
 <body>
-    {{hello}}
-    <a href="/login">登录</a>
-    <a href="/reg">注册</a>
+    {{cookieUserName}}
 
-    <h2>留言板</h2>
-    <input type="text" placeholder="请输入标题" id="title" /><br/>
-    <textarea id="message" cols="30" rows="5" placeholder="请输入内容"></textarea><br/>
-    <input type="button" value="提交" />
+    <a href="/users-list">用户列表</a>
+    {% if !cookieUserName %}
+        <a href="/login">登录</a>
+        <a href="/reg">注册</a>
+
+    {% elseif cookieUserName %}
+        <a href="javascript:;" id="exit">退出</a>
+        <h2>留言板</h2>
+        <input type="text" placeholder="请输入标题" id="title" /><br/>
+        <textarea id="message" cols="30" rows="5" placeholder="请输入内容"></textarea><br/>
+        <input type="button" value="提交" />
+    {% endif %}
+
+
+    <script>
+        $("#exit").click(function(){
+            $.ajax({
+                url:"/api/exit",
+                success: function(data){
+                    console.log(data);
+                    if( data.status === 0 ){
+                        window.location.href = "/"
+                    }else{
+                        console.log(data.message);
+                    }
+                },
+                error:function(){
+
+                }
+            })
+        })
+    </script>
+
 
 </body>
 </html>

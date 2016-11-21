@@ -60,6 +60,15 @@ router.post("/reg",function (req,res) {
     })
 });
 
+router.get("/exit",function(req,res){
+    res.setHeader("Set-Cookie","mb-userName=1;domain=localhost;path=/;expires=" + new Date(2013,12,12).toUTCString());
+
+    res.json({
+        status: 0,
+        message: "退出成功"
+    })
+})
+
 
 
 
