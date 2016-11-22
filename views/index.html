@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" href="bootstrap.min.css">
 </head>
 <body>
     {{cookieUserName}}
@@ -19,6 +20,18 @@
         <input type="text" placeholder="请输入标题" id="title" /><br/>
         <textarea id="message" cols="30" rows="5" placeholder="请输入内容"></textarea><br/>
         <input type="button" value="提交" id="send" />
+        <hr />
+
+        <ul>
+            {% for item in messages %}
+                <li>
+                    <h5>{{item.userName}}，说：</h5>
+                    <p style="background: gray;">{{item.message}}</p>
+                    <p style="font-size:12px;">{{item.date}}</p>
+                    <hr>
+                </li>
+            {% endfor %}
+        </ul>
     {% endif %}
 
 
@@ -50,6 +63,28 @@
             $.ajax({
                 url:"/api/message",
                 data:msg,
+                method:"post",
+                success: function(data){
+                    console.log(data);
+                    if( data.status === 0 ){
+                       // window.location.href = "/"
+                    }else{
+                        console.log(data.message);
+                    }
+                },
+                error:function(){
+
+                }
+            })
+        })
+        $("#send").click(function(){
+            var data = {
+                title: $("#title").val(),
+                message: $("#message").val()
+            }
+            $.ajax({
+                url:"/api/message",
+                data:data,
                 method:"post",
                 success: function(data){
                     console.log(data);

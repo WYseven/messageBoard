@@ -34,12 +34,19 @@ router.use(["/users-list"],function(req,res,next){
 
 
 router.get("/",function (req,res) {
-    var usersColletion =  db.collection("user");
-    usersColletion.findOne({userName:req.cookieUserName},function(err,data){
-        if(err) throw err;
-        console.log(data);
-    })
-    res.render("index",{cookieUserName:req.cookieUserName});
+    var messageColletion =  db.collection("message");
+
+    messageColletion.find().toArray()
+        .then(function(data){
+            console.log(data);
+            res.render("index",{
+                cookieUserName:req.cookieUserName,
+                messages:data
+            });
+        })
+        .catch(function(err){
+            throw err;
+        })
 });
 
 router.get("/login",function (req,res) {
