@@ -18,7 +18,7 @@
         <h2>留言板</h2>
         <input type="text" placeholder="请输入标题" id="title" /><br/>
         <textarea id="message" cols="30" rows="5" placeholder="请输入内容"></textarea><br/>
-        <input type="button" value="提交" />
+        <input type="button" value="提交" id="send" />
     {% endif %}
 
 
@@ -30,6 +30,31 @@
                     console.log(data);
                     if( data.status === 0 ){
                         window.location.href = "/"
+                    }else{
+                        console.log(data.message);
+                    }
+                },
+                error:function(){
+
+                }
+            })
+        });
+
+
+
+        $("#send").click(function(){
+            var msg = {
+                title:$("#title").val(),
+                content:$("#message").val()
+            }
+            $.ajax({
+                url:"/api/message",
+                data:msg,
+                method:"post",
+                success: function(data){
+                    console.log(data);
+                    if( data.status === 0 ){
+                       // window.location.href = "/"
                     }else{
                         console.log(data.message);
                     }

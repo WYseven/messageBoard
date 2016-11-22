@@ -59,6 +59,17 @@ router.post("/reg",function (req,res) {
         }
     })
 });
+router.post("/message",function (req,res) {
+    var title = req.body.title;
+    var content = req.body.content;
+
+
+
+    res.json({
+        status:0,
+        message:"留言成功"
+    })
+});
 
 router.get("/exit",function(req,res){
     res.setHeader("Set-Cookie","mb-userName=1;domain=localhost;path=/;expires=" + new Date(2013,12,12).toUTCString());

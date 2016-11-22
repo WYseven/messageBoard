@@ -34,7 +34,11 @@ router.use(["/users-list"],function(req,res,next){
 
 
 router.get("/",function (req,res) {
-
+    var usersColletion =  db.collection("user");
+    usersColletion.findOne({userName:req.cookieUserName},function(err,data){
+        if(err) throw err;
+        console.log(data);
+    })
     res.render("index",{cookieUserName:req.cookieUserName});
 });
 
