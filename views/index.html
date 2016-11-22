@@ -17,7 +17,6 @@
     {% elseif cookieUserName %}
         <a href="javascript:;" id="exit">退出</a>
         <h2>留言板</h2>
-        <input type="text" placeholder="请输入标题" id="title" /><br/>
         <textarea id="message" cols="30" rows="5" placeholder="请输入内容"></textarea><br/>
         <input type="button" value="提交" id="send" />
         <hr />
@@ -26,8 +25,21 @@
             {% for item in messages %}
                 <li>
                     <h5>{{item.userName}}，说：</h5>
-                    <p style="background: gray;">{{item.message}}</p>
-                    <p style="font-size:12px;">{{item.date}}</p>
+                    <p style="background: gray;">
+                        {{item.message}}
+                    </p>
+                    <div style="font-size:12px;">
+                        留言时间：{{item.date}}
+                        {% if cookieUserName === item.userName %}
+                            <a href="javascript:;" data-id={{item.id}} class="deleteMessage">删除</a>
+                            <a href="javascript:;" class="edtorMessage">编辑</a>
+                            <div style="display:none;" class="edtor">
+                                <textarea cols="30" rows="5" value={{item.message}}>{{item.message}}</textarea><br/>
+                                <input type="button" class="edtorSend" data-id={{item.id}} value="提交" />
+                            </div>
+                        {% endif %}
+
+                    </div>
                     <hr>
                 </li>
             {% endfor %}
@@ -36,6 +48,7 @@
 
 
     <script>
+        //请求ajax退出
         $("#exit").click(function(){
             $.ajax({
                 url:"/api/exit",
@@ -52,12 +65,9 @@
                 }
             })
         });
-
-
-
+        //请求ajax发送留言
         $("#send").click(function(){
             var msg = {
-                title:$("#title").val(),
                 content:$("#message").val()
             }
             $.ajax({
@@ -67,7 +77,7 @@
                 success: function(data){
                     console.log(data);
                     if( data.status === 0 ){
-                       // window.location.href = "/"
+                        window.location.href = "/"
                     }else{
                         console.log(data.message);
                     }
@@ -77,28 +87,50 @@
                 }
             })
         })
-        $("#send").click(function(){
-            var data = {
-                title: $("#title").val(),
-                message: $("#message").val()
-            }
+        //请求ajax删除留言
+        $(".deleteMessage").on("click",function(){
+            var id = $(this).attr("data-id");
             $.ajax({
-                url:"/api/message",
-                data:data,
-                method:"post",
-                success: function(data){
+                url:"/api/deleteById",
+                data:{id:id},
+                success:function(data){
                     console.log(data);
-                    if( data.status === 0 ){
-                       // window.location.href = "/"
+                    if(data.status === 0){
+                        window.location.href = '/';
                     }else{
-                        console.log(data.message);
+                        console.log(data);
                     }
                 },
-                error:function(){
+                error:function(data){
+                    console.log(data);
+                }
+            });
+        });
+        //显示更新的输入框
+        $(".edtorMessage").on("click",function(){
+            $(this).next(".edtor").show()
+        })
+        //请求ajax,更新留言内容
+        $(".edtorSend").click(function(){
+            var prevVal = $(this).prev().text();
 
+            $.ajax({
+                url:"/api/updataMessage",
+                method:"post",
+                data:{
+                    id:$(this).attr("data-id"),
+                    content:prevVal
+                },
+                success:function(data){
+                    if( data.status === 0){
+                       // window.location.href = '/';
+                    }else{
+                        console.log(data)
+                    }
                 }
             })
         })
+
     </script>
 
 

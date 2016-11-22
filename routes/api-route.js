@@ -10,6 +10,10 @@ function getDate() {
 
 }
 
+function random(){
+    return Math.floor(Math.random() * 1000000000);
+}
+
 
 //登录API请求
 router.post("/login",function(req,res){
@@ -43,14 +47,13 @@ router.post("/reg",function (req,res) {
         if( err ){
             throw err;
         }else{
-            console.log(data);
             if(data){
                 res.json({
                     status: 1,
                     message:"已经存在"
                 });
             }else{
-                usersColletion.insert({
+                usersColletion.insertOne({
                     userName:userName
                 }).then(function(){
                     res.json({
@@ -63,17 +66,6 @@ router.post("/reg",function (req,res) {
 
             }
         }
-    })
-});
-router.post("/message",function (req,res) {
-    var title = req.body.title;
-    var content = req.body.content;
-
-
-
-    res.json({
-        status:0,
-        message:"留言成功"
     })
 });
 
@@ -89,15 +81,14 @@ router.get("/exit",function(req,res){
 
 
 router.post("/message",function(req,res){
-    var title = req.body.title;
-    var message = req.body.message;
+    var message = req.body.content;
     var userName = req.cookies["mb-userName"];
     //发过来后，获取到cookie，根据cookie确定用户名
 
     var messageColletion =  db.collection("message");
-    messageColletion.insert({
+    messageColletion.insertOne({
+        id:random()+"",
         userName:userName,
-        title:title,
         message:message,
         date:getDate()
     })
@@ -111,6 +102,55 @@ router.post("/message",function(req,res){
             throw err;
         })
 
+
+})
+
+router.post("/updataMessage",function(req,res){
+    var message = req.body.content;
+    var id = req.body.id;
+    var userName = req.cookies["mb-userName"];
+    //发过来后，获取到cookie，根据cookie确定用户名
+
+    var messageColletion =  db.collection("message");
+    messageColletion
+        .updateOne(
+            {id:id},
+            {$set:{content:message}},
+            {upsert:true}
+        )
+        .then(function(){
+            res.json({
+                status: 0,
+                message: "更新成功"
+            })
+        })
+        .catch(function(err){
+            throw err;
+        })
+
+
+})
+
+router.get("/deleteById",function(req,res){
+    var id = req.query.id;
+    var messageColletion =  db.collection("message");
+
+    messageColletion.deleteOne({id:id},function(err,data){
+        if( err ) throw err;
+        if(data.result.ok === 1){
+            res.json({
+                status:0,
+                message:"删除成功"
+            })
+        }else{
+            res.json({
+                status:1,
+                message:"失败"
+            })
+        }
+
+
+    })
 
 })
 

@@ -38,7 +38,6 @@ router.get("/",function (req,res) {
 
     messageColletion.find().toArray()
         .then(function(data){
-            console.log(data);
             res.render("index",{
                 cookieUserName:req.cookieUserName,
                 messages:data
