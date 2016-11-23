@@ -17,7 +17,7 @@ function random(){
 
 //登录API请求
 router.post("/login",function(req,res){
-    var userName = req.body.userName;
+    var userName = encodeURI(req.body.userName);
     var usersColletion =  db.collection("user");
 
     usersColletion.findOne({userName:userName},function(err,data){
@@ -41,7 +41,7 @@ router.post("/login",function(req,res){
 //注册API请求
 
 router.post("/reg",function (req,res) {
-    var userName = req.body.userName;
+    var userName = encodeURI(req.body.userName);
     var usersColletion =  db.collection("user");
     usersColletion.findOne({userName:userName},function(err,data){
         if( err ){
@@ -159,26 +159,28 @@ router.post("/updateMessage",function(req,res){
 })
 
 //删除留言
-router.get("/deleteById",function(req,res){
+router.get("/deleteMessageById",function(req,res){
     var id = req.query.id;
     var messageColletion =  db.collection("message");
-
-    messageColletion.deleteOne({id:id},function(err,data){
-        if( err ) throw err;
-        if(data.result.ok === 1){
-            res.json({
-                status:0,
-                message:"删除成功"
-            })
-        }else{
-            res.json({
-                status:1,
-                message:"失败"
-            })
-        }
-
-
-    })
+    var commentColletion =  db.collection("comment");
+    //删除留言和评论
+    messageColletion.deleteOne({id:id})
+        .then(function(data){
+            if(data.result.ok === 1){
+                return commentColletion.deleteMany({message_id:id})
+            }
+        })
+        .then(function(data){
+            if(data.result.ok === 1){
+                res.json({
+                    status:0,
+                    message:"删除成功"
+                })
+            }
+        })
+        .catch(function(err){
+            throw err;
+        })
 
 })
 

@@ -7,7 +7,8 @@ var router = express.Router();
 //中间件，用来获取cookie
 
 router.use(function(req,res,next){
-    req.cookieUserName = req.cookies["mb-userName"];
+    req.cookieUserName = decodeURI(req.cookies["mb-userName"] || "");
+    console.log(typeof req.cookieUserName)
     next();
 });
 
@@ -42,15 +43,29 @@ router.get("/",function (req,res) {
 
             //找每一个id对应的评论
 
+            var arr = [];
+
+
+            //利用promise，请求所有留言后，然后在进行渲染页面
             data.forEach(function(item,index){
-                commentColletion.find({message_id:data.id}).toArray().
+                arr.push(commentColletion
+                    .find({message_id:item.id})
+                    .toArray())
             })
 
-            res.render("index",{
-                cookieUserName:req.cookieUserName,
-                messages:data,
-                comments:[]
+            Promise.all(arr).then(function(dataArr){
+
+                dataArr.forEach(function(item,index){
+                    data[index].comments = item
+                });
+
+                res.render("index",{
+                    cookieUserName:req.cookieUserName,
+                    messages:data,
+                    comments:[]
+                });
             });
+
         })
         .catch(function(err){
             throw err;

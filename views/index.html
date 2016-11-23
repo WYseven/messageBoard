@@ -41,14 +41,14 @@
                     <p class="message-content">
                         {{item.message}}
                     </p>
-                    {% for commentItem in comments %}
+                    {% for commentItem in item.comments %}
                     <div class="comment-section">
-                        <h5>{{item.userName}}，评论说：</h5>
+                        <h5>{{commentItem.userName}}，评论说：</h5>
                         <p class="comment-content">
-                            {{item.message}}
+                            {{commentItem.cooment}}
                         </p>
                         <p>
-                            评论时间：{{item.date}}
+                            评论时间：{{commentItem.date}}
                         </p>
                     </div>
                     {% endfor %}
@@ -119,7 +119,7 @@
         $(".deleteMessage").on("click",function(){
             var id = $(this).attr("data-id");
             $.ajax({
-                url:"/api/deleteById",
+                url:"/api/deleteMessageById",
                 data:{id:id},
                 success:function(data){
                     console.log(data);
@@ -177,7 +177,7 @@
                 },
                 success:function(data){
                     if( data.status === 0){
-                      //  window.location.href = '/';
+                        window.location.href = '/';
                     }else{
                         console.log(data)
                     }
