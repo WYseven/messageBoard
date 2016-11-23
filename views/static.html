@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="/bootstrap.min.css">
+    <link rel="stylesheet" href="/site.min.css">
+    <style>
+        .content{
+            margin-top: 20px;
+            background: #f8f8f8;
+        }
+        .content .container{
+            background: #fff;
+        }
+        .custom-message-btn {
+            margin-top: 10px;
+        }
+        .message-content {
+            width: 100%;
+            border:1px solid #dadada;
+
+        }
+        .message-content .row{
+
+            margin:20px 10px 0px 0px;
+
+        }
+        .message-item{
+            border: dotted 1px #ddd;
+            padding-bottom: 20px;
+            margin:20px 20px;
+        }
+        .message-text{
+            margin-top: 10px;
+            margin-left: 15px;
+        }
+        .comment-content{
+            margin: 0px 10px;
+        }
+        .handle-options{
+            padding-right: 35px;
+        }
+        .handle-options a{
+            margin:0px 5px;
+        }
+        .comment-item{
+            margin-bottom: 10px;
+            background: #ffe;
+            border: solid 1px #aaa;
+        }
+        .edtor-content {
+            display: none;
+            margin:0px 15px 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand hidden-sm" href="/">好点子</a>
+        </div>
+        <div class="navbar-collapse collapse" role="navigation">
+            <ul class="nav navbar-nav">
+                <li class="hidden-sm hidden-md"><a href="/" target="_blank">首页</a></li>
+                <li class="hidden-sm hidden-md"><a href="/" target="_blank">点子用户</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right hidden-sm">
+                <li><a href="/about/">登录</a></li>
+                <li><a href="/about/">注册</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+        <div class="bs-example">
+            <h3>休息片刻，写下你的好点子：</h3>
+            <textarea class="form-control" rows="3"></textarea>
+            <p class="text-right custom-message-btn">
+                <button type="button" class="btn btn-default">留点</button>
+            </p>
+        </div>
+        <div style="border: 1px dashed #ccc"></div>
+        <div class="bs-example">
+            <h3>点子区：</h3>
+            <div class="message-content">
+                <div class="message-item">
+                    <div class="row">
+                        <div class="col-xs-10">
+                            <a href="javascript:;">leo</a>
+                        </div>
+                        <div class="col-xs-2">2016-11-23 11:20:59</div>
+                    </div>
+                    <p class="message-text">
+                        今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
+                        今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
+                        今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
+                    </p>
+                </div>
+                <div class="message-item">
+                    <div class="row">
+                        <div class="col-xs-10">
+                            <a href="javascript:;">leo</a>
+                        </div>
+                        <div class="col-xs-2">2016-11-23 11:20:59</div>
+                    </div>
+                    <p class="message-text">
+                        今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
+                    </p>
+                    <p class="text-right handle-options">
+                        <a href="">踩[1]</a>
+                        <a href="">顶[1]</a>
+                        <a href="">删除</a>
+                        <a href="">编辑</a>
+                        <a href="">评论[100]</a>
+                    </p>
+                    <div class="edtor-content">
+                        <div class="bs-example">
+                            <h6>换个姿势，再来一次：</h6>
+                            <textarea class="form-control" rows="3"></textarea>
+                            <p class="text-right custom-message-btn">
+                                <button type="button" class="btn btn-default">取消</button>
+                                <button type="button" class="btn btn-default">留点</button>
+                            </p>
+                        </div>
+                        <div style="border: 1px dashed #ccc"></div>
+                    </div>
+                    <div class="comment-content">
+                        <div class="comment-item">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <a href="javascript:;">leo</a>
+                                </div>
+                                <div class="col-xs-2">2016-11-23 11:20:59</div>
+                            </div>
+                            <p class="message-text">
+                                今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
+                                今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
+                                今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
+                            </p>
+                        </div>
+                        <div class="comment-item">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <a href="javascript:;">leo</a>
+                                </div>
+                                <div class="col-xs-2">2016-11-23 11:20:59</div>
+                            </div>
+                            <p class="message-text">
+                                今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
+                                今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
+                                今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
+                            </p>
+                        </div>
+                        <div class="comment-item">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <a href="javascript:;">leo</a>
+                                </div>
+                                <div class="col-xs-2">2016-11-23 11:20:59</div>
+                            </div>
+                            <p class="message-text">
+                                今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
+                                今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
+                                今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+</body>
+</html>

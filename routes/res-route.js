@@ -59,7 +59,7 @@ router.get("/",function (req,res) {
                     data[index].comments = item
                 });
 
-                res.render("index",{
+                res.render("static",{
                     cookieUserName:req.cookieUserName,
                     messages:data,
                     comments:[]
