@@ -5,6 +5,19 @@
     <title>Title</title>
     <script src="jquery-3.1.1.min.js"></script>
     <link rel="stylesheet" href="bootstrap.min.css">
+    <style>
+        .message-content{
+            background: #e9e9e9;
+        }
+        .comment-section {
+            margin-left: 30px;
+            background: #c3d8f0;
+        }
+        .comment-content {
+            margin-left: 30px;
+            background: #e9e9e9;
+        }
+    </style>
 </head>
 <body>
     {{cookieUserName}}
@@ -25,10 +38,21 @@
             {% for item in messages %}
                 <li>
                     <h5>{{item.userName}}，说：</h5>
-                    <p style="background: gray;">
+                    <p class="message-content">
                         {{item.message}}
                     </p>
-                    <div style="font-size:12px;">
+                    {% for commentItem in comments %}
+                    <div class="comment-section">
+                        <h5>{{item.userName}}，评论说：</h5>
+                        <p class="comment-content">
+                            {{item.message}}
+                        </p>
+                        <p>
+                            评论时间：{{item.date}}
+                        </p>
+                    </div>
+                    {% endfor %}
+                    <div class="" style="font-size:12px;">
                         留言时间：{{item.date}}
                         {% if cookieUserName === item.userName %}
                             <a href="javascript:;" data-id={{item.id}} class="deleteMessage">删除</a>
@@ -38,7 +62,11 @@
                                 <input type="button" class="edtorSend" data-id={{item.id}} value="提交" />
                             </div>
                         {% endif %}
-
+                            <a href="javascript:;" class="comment">评论</a>
+                            <div style="display:none;" class="commentSection">
+                                <textarea cols="30" rows="5"></textarea><br/>
+                                <input type="button" class="commentSend" data-id={{item.id}} value="提交" />
+                            </div>
                     </div>
                     <hr>
                 </li>
@@ -110,12 +138,17 @@
         $(".edtorMessage").on("click",function(){
             $(this).next(".edtor").show()
         })
+        //显示评论的输入框
+        $(".comment").on("click",function(){
+            $(this).next(".commentSection").show()
+        })
         //请求ajax,更新留言内容
         $(".edtorSend").click(function(){
-            var prevVal = $(this).prev().text();
+            console.log( $(this).siblings("textarea") );
+            var prevVal = $(this).siblings("textarea").val();
 
             $.ajax({
-                url:"/api/updataMessage",
+                url:"/api/updateMessage",
                 method:"post",
                 data:{
                     id:$(this).attr("data-id"),
@@ -123,7 +156,28 @@
                 },
                 success:function(data){
                     if( data.status === 0){
-                       // window.location.href = '/';
+                        window.location.href = '/';
+                    }else{
+                        console.log(data)
+                    }
+                }
+            })
+        })
+        //请求ajax，评论留言
+        $(".commentSend").click(function(){
+            console.log( $(this).siblings("textarea") );
+            var prevVal = $(this).siblings("textarea").val();
+
+            $.ajax({
+                url:"/api/comment",
+                method:"post",
+                data:{
+                    id:$(this).attr("data-id"),
+                    content:prevVal
+                },
+                success:function(data){
+                    if( data.status === 0){
+                      //  window.location.href = '/';
                     }else{
                         console.log(data)
                     }

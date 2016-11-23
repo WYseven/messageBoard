@@ -68,7 +68,7 @@ router.post("/reg",function (req,res) {
         }
     })
 });
-
+//退出
 router.get("/exit",function(req,res){
     res.setHeader("Set-Cookie","mb-userName='';domain=localhost;path=/;expires=" + new Date(2013,12,12).toUTCString());
     //res.setHeader("Set-Cookie","mb-userName='';domain=localhost;path=/api;expires=" + new Date(2013,12,12).toUTCString());
@@ -79,7 +79,7 @@ router.get("/exit",function(req,res){
     })
 })
 
-
+//留言
 router.post("/message",function(req,res){
     var message = req.body.content;
     var userName = req.cookies["mb-userName"];
@@ -104,8 +104,35 @@ router.post("/message",function(req,res){
 
 
 })
+//评论
+router.post("/comment",function(req,res){
+    var id = req.body.id;
+    var message = req.body.content;
+    var userName = req.cookies["mb-userName"];
+    //发过来后，获取到cookie，根据cookie确定用户名
 
-router.post("/updataMessage",function(req,res){
+    var messageColletion =  db.collection("comment");
+    messageColletion.insertOne({
+        id:random()+"",
+        userName:userName,
+        cooment:message,
+        date:getDate(),
+        message_id:id
+    })
+        .then(function(){
+            res.json({
+                status: 0,
+                message: "提交成功"
+            })
+        })
+        .catch(function(err){
+            throw err;
+        })
+
+
+})
+//更新留言
+router.post("/updateMessage",function(req,res){
     var message = req.body.content;
     var id = req.body.id;
     var userName = req.cookies["mb-userName"];
@@ -115,7 +142,7 @@ router.post("/updataMessage",function(req,res){
     messageColletion
         .updateOne(
             {id:id},
-            {$set:{content:message}},
+            {$set:{message:message}},
             {upsert:true}
         )
         .then(function(){
@@ -131,6 +158,7 @@ router.post("/updataMessage",function(req,res){
 
 })
 
+//删除留言
 router.get("/deleteById",function(req,res){
     var id = req.query.id;
     var messageColletion =  db.collection("message");

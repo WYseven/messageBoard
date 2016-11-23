@@ -35,12 +35,21 @@ router.use(["/users-list"],function(req,res,next){
 
 router.get("/",function (req,res) {
     var messageColletion =  db.collection("message");
+    var commentColletion =  db.collection("comment");
 
     messageColletion.find().toArray()
         .then(function(data){
+
+            //找每一个id对应的评论
+
+            data.forEach(function(item,index){
+                commentColletion.find({message_id:data.id}).toArray().
+            })
+
             res.render("index",{
                 cookieUserName:req.cookieUserName,
-                messages:data
+                messages:data,
+                comments:[]
             });
         })
         .catch(function(err){
