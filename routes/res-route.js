@@ -59,7 +59,7 @@ router.get("/",function (req,res) {
                     data[index].comments = item
                 });
 
-                res.render("static",{
+                res.render("static-users-list",{
                     cookieUserName:req.cookieUserName,
                     messages:data,
                     comments:[]
