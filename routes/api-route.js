@@ -4,6 +4,9 @@
 var express = require("express");
 var router = express.Router();
 
+var handle = require("../model/handle");
+var M = handle.M;
+
 function getDate() {
     var date = new Date();
     return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
@@ -181,6 +184,21 @@ router.get("/deleteMessageById",function(req,res){
         .catch(function(err){
             throw err;
         })
+
+})
+
+//获取所有的点子
+router.get("/getMessage",function(req,res){
+
+    M("message").find().toArray()
+        .then(function(data){
+            console.log(data[0]);
+            res.json(data)
+        })
+        .catch(function(err){
+            throw err;
+        })
+
 
 })
 

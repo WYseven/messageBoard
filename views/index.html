@@ -3,190 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+    <link rel="stylesheet" href="/bootstrap.min.css">
+    <link rel="stylesheet" href="/site.min.css">
+    <script src="vue.js"></script>
     <script src="jquery-3.1.1.min.js"></script>
-    <link rel="stylesheet" href="bootstrap.min.css">
     <style>
-        .message-content{
-            background: #e9e9e9;
+        .content{
+            margin-top: 20px;
+            background: #f8f8f8;
         }
-        .comment-section {
-            margin-left: 30px;
-            background: #c3d8f0;
+        .content .container{
+            background: #fff;
         }
-        .comment-content {
-            margin-left: 30px;
-            background: #e9e9e9;
+        .custom-message-btn {
+            margin-top: 10px;
+        }
+        .message-content {
+            width: 100%;
+            border:1px solid #dadada;
+
+        }
+        .message-content .row{
+
+            margin:20px 10px 0px 0px;
+
+        }
+        .message-item{
+            border: dotted 1px #ddd;
+            padding-bottom: 20px;
+            margin:20px 20px;
+        }
+        .message-text{
+            margin-top: 10px;
+            margin-left: 15px;
+        }
+        .comment-content{
+            margin: 0px 10px;
+        }
+        .handle-options{
+            padding-right: 35px;
+        }
+        .handle-options a{
+            margin:0px 5px;
+        }
+        .comment-item{
+            margin-bottom: 10px;
+            background: #ffe;
+            border: solid 1px #aaa;
+        }
+        .edtor-content {
+            margin:0px 15px 10px;
         }
     </style>
 </head>
 <body>
-    {{cookieUserName}}
+{% include 'header.html' %}
 
-    <a href="/users-list">用户列表</a>
-    {% if !cookieUserName %}
-        <a href="/login">登录</a>
-        <a href="/reg">注册</a>
+<div class="content" :a="list.a" id="app">
+    <div class="container">
+        <div class="bs-example">
+            <h3>休息片刻，写下你的好点子：</h3>
+            <textarea class="form-control" rows="3"></textarea>
+            <p class="text-right custom-message-btn">
+                <button type="button" class="btn btn-default">留点</button>
+            </p>
+        </div>
+        <div style="border: 1px dashed #ccc"></div>
+        <div class="bs-example">
+            <h3>点子区：</h3>
+            <div class="message-content">
 
-    {% elseif cookieUserName %}
-        <a href="javascript:;" id="exit">退出</a>
-        <h2>留言板</h2>
-        <textarea id="message" cols="30" rows="5" placeholder="请输入内容"></textarea><br/>
-        <input type="button" value="提交" id="send" />
-        <hr />
-
-        <ul>
-            {% for item in messages %}
-                <li>
-                    <h5>{{item.userName}}，说：</h5>
-                    <p class="message-content">
-                        {{item.message}}
+                <div class="message-item" v-for="item of list">
+                    {{list[0]}}
+                    <div class="row">
+                        <div class="col-xs-9">
+                            <a href="javascript:;">{{item._id+"1"}}</a>
+                        </div>
+                        <div class="col-xs-3">2016-11-23 11:20:59</div>
+                    </div>
+                    <p class="message-text">
+                        今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
                     </p>
-                    {% for commentItem in item.comments %}
-                    <div class="comment-section">
-                        <h5>{{commentItem.userName}}，评论说：</h5>
-                        <p class="comment-content">
-                            {{commentItem.cooment}}
-                        </p>
-                        <p>
-                            评论时间：{{commentItem.date}}
-                        </p>
+                    <p class="text-right handle-options">
+                        <a href="javascript:;">踩[1]</a>
+                        <a href="javascript:;">顶[1]</a>
+                        <a href="javascript:;">删除</a>
+                        <a href="javascript:;">编辑</a>
+                        <a href="javascript:;">评论[100]</a>
+                    </p>
+                    <div v-show="0" class="edtor-content">
+                        <div class="bs-example">
+                            <h6>换个姿势，再来一次：</h6>
+                            <textarea class="form-control" rows="3"></textarea>
+                            <p class="text-right custom-message-btn">
+                                <button type="button" class="btn btn-default">取消</button>
+                                <button type="button" class="btn btn-default">留点</button>
+                            </p>
+                        </div>
+                        <div style="border: 1px dashed #ccc"></div>
                     </div>
-                    {% endfor %}
-                    <div class="" style="font-size:12px;">
-                        留言时间：{{item.date}}
-                        {% if cookieUserName === item.userName %}
-                            <a href="javascript:;" data-id={{item.id}} class="deleteMessage">删除</a>
-                            <a href="javascript:;" class="edtorMessage">编辑</a>
-                            <div style="display:none;" class="edtor">
-                                <textarea cols="30" rows="5" value={{item.message}}>{{item.message}}</textarea><br/>
-                                <input type="button" class="edtorSend" data-id={{item.id}} value="提交" />
+                    <div v-show="0" class="comment-content">
+                        <div class="comment-item">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <a href="javascript:;">leo</a>
+                                </div>
+                                <div class="col-xs-2">2016-11-23 11:20:59</div>
                             </div>
-                        {% endif %}
-                            <a href="javascript:;" class="comment">评论</a>
-                            <div style="display:none;" class="commentSection">
-                                <textarea cols="30" rows="5"></textarea><br/>
-                                <input type="button" class="commentSend" data-id={{item.id}} value="提交" />
+                            <p class="message-text">
+                                今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
+                                今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
+                                今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
+                            </p>
+                        </div>
+                        <div class="comment-item">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <a href="javascript:;">leo</a>
+                                </div>
+                                <div class="col-xs-2">2016-11-23 11:20:59</div>
                             </div>
+                            <p class="message-text">
+                                今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
+                                今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
+                                今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
+                            </p>
+                        </div>
+                        <div class="comment-item">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <a href="javascript:;">leo</a>
+                                </div>
+                                <div class="col-xs-2">2016-11-23 11:20:59</div>
+                            </div>
+                            <p class="message-text">
+                                今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
+                                今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
+                                今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
+                            </p>
+                        </div>
                     </div>
-                    <hr>
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 
 
-    <script>
-        //请求ajax退出
-        $("#exit").click(function(){
+</div>
+<script>
+    //console.log(test);
+   //发送ajax获取数据
+var vm = new Vue({
+    el:"#app",
+    data:{
+        list:[]
+    },
+    
+    methods:{
+        getlist:function(){
             $.ajax({
-                url:"/api/exit",
-                success: function(data){
+                url:"/api/getMessage",
+                success:(data) => {
                     console.log(data);
-                    if( data.status === 0 ){
-                        window.location.href = "/"
-                    }else{
-                        console.log(data.message);
-                    }
+                    this.list = data;
                 },
-                error:function(){
-
+                error:function(error){
+                    console.log(error);
                 }
             })
-        });
-        //请求ajax发送留言
-        $("#send").click(function(){
-            var msg = {
-                content:$("#message").val()
-            }
-            $.ajax({
-                url:"/api/message",
-                data:msg,
-                method:"post",
-                success: function(data){
-                    console.log(data);
-                    if( data.status === 0 ){
-                        window.location.href = "/"
-                    }else{
-                        console.log(data.message);
-                    }
-                },
-                error:function(){
-
-                }
-            })
-        })
-        //请求ajax删除留言
-        $(".deleteMessage").on("click",function(){
-            var id = $(this).attr("data-id");
-            $.ajax({
-                url:"/api/deleteMessageById",
-                data:{id:id},
-                success:function(data){
-                    console.log(data);
-                    if(data.status === 0){
-                        window.location.href = '/';
-                    }else{
-                        console.log(data);
-                    }
-                },
-                error:function(data){
-                    console.log(data);
-                }
-            });
-        });
-        //显示更新的输入框
-        $(".edtorMessage").on("click",function(){
-            $(this).next(".edtor").show()
-        })
-        //显示评论的输入框
-        $(".comment").on("click",function(){
-            $(this).next(".commentSection").show()
-        })
-        //请求ajax,更新留言内容
-        $(".edtorSend").click(function(){
-            console.log( $(this).siblings("textarea") );
-            var prevVal = $(this).siblings("textarea").val();
-
-            $.ajax({
-                url:"/api/updateMessage",
-                method:"post",
-                data:{
-                    id:$(this).attr("data-id"),
-                    content:prevVal
-                },
-                success:function(data){
-                    if( data.status === 0){
-                        window.location.href = '/';
-                    }else{
-                        console.log(data)
-                    }
-                }
-            })
-        })
-        //请求ajax，评论留言
-        $(".commentSend").click(function(){
-            console.log( $(this).siblings("textarea") );
-            var prevVal = $(this).siblings("textarea").val();
-
-            $.ajax({
-                url:"/api/comment",
-                method:"post",
-                data:{
-                    id:$(this).attr("data-id"),
-                    content:prevVal
-                },
-                success:function(data){
-                    if( data.status === 0){
-                        window.location.href = '/';
-                    }else{
-                        console.log(data)
-                    }
-                }
-            })
-        })
-
-    </script>
+        }
+    }
+})
+    //获取数据
+    vm.getlist();
 
 
+</script>
 </body>
 </html>
