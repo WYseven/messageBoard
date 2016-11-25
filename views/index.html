@@ -59,14 +59,14 @@
 </head>
 <body>
 {% include 'header.html' %}
-
+{%raw%}
 <div class="content" :a="list.a" id="app">
     <div class="container">
         <div class="bs-example">
             <h3>休息片刻，写下你的好点子：</h3>
-            <textarea class="form-control" rows="3"></textarea>
+            <textarea class="form-control" rows="3" v-model="message"></textarea>
             <p class="text-right custom-message-btn">
-                <button type="button" class="btn btn-default">留点</button>
+                <button type="button" class="btn btn-default" @click="sendMessage">留点</button>
             </p>
         </div>
         <div style="border: 1px dashed #ccc"></div>
@@ -74,25 +74,24 @@
             <h3>点子区：</h3>
             <div class="message-content">
 
-                <div class="message-item" v-for="item of list">
-                    {{list[0]}}
+                <div class="message-item" v-for="item,index of list">
                     <div class="row">
                         <div class="col-xs-9">
-                            <a href="javascript:;">{{item._id+"1"}}</a>
+                            <a href="javascript:;">{{item.userName}}[{{item.id}}]</a>
                         </div>
                         <div class="col-xs-3">2016-11-23 11:20:59</div>
                     </div>
                     <p class="message-text">
-                        今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
+                        {{item.message}}
                     </p>
                     <p class="text-right handle-options">
-                        <a href="javascript:;">踩[1]</a>
-                        <a href="javascript:;">顶[1]</a>
-                        <a href="javascript:;">删除</a>
-                        <a href="javascript:;">编辑</a>
-                        <a href="javascript:;">评论[100]</a>
+                        <a href="javascript:;">踩[{{item.agree}}]</a>
+                        <a href="javascript:;">顶[{{item.unAgree}}]</a>
+                        <a href="javascript:;"  @click="deleteMessage(item.id,index)">删除</a>
+                        <a href="javascript:;" @click="editing(item.id)">编辑</a>
+                        <a href="javascript:;" @click="commenting(item.id,index,item.showComment)">评论[{{item.commentNum}}]</a>
                     </p>
-                    <div v-show="0" class="edtor-content">
+                    <div v-show="editingById === item.id" class="edtor-content">
                         <div class="bs-example">
                             <h6>换个姿势，再来一次：</h6>
                             <textarea class="form-control" rows="3"></textarea>
@@ -103,34 +102,22 @@
                         </div>
                         <div style="border: 1px dashed #ccc"></div>
                     </div>
-                    <div v-show="0" class="comment-content">
-                        <div class="comment-item">
-                            <div class="row">
-                                <div class="col-xs-10">
-                                    <a href="javascript:;">leo</a>
-                                </div>
-                                <div class="col-xs-2">2016-11-23 11:20:59</div>
-                            </div>
-                            <p class="message-text">
-                                今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
-                                今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
-                                今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
+                    <div v-show="item.showComment" class="comment-content">
+                        <div class="bs-example">
+                            <h6>尽情评论吧：</h6>
+                            <textarea ref="commentMessage" class="form-control" rows="3"></textarea>
+                            <p class="text-right custom-message-btn">
+                                <button type="button" class="btn btn-default">取消</button>
+                                <button
+                                        type="button"
+                                        @click="sendComment(item.id,index)"
+                                        class="btn btn-default"
+                                >
+                                    评论
+                                </button>
                             </p>
                         </div>
-                        <div class="comment-item">
-                            <div class="row">
-                                <div class="col-xs-10">
-                                    <a href="javascript:;">leo</a>
-                                </div>
-                                <div class="col-xs-2">2016-11-23 11:20:59</div>
-                            </div>
-                            <p class="message-text">
-                                今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
-                                今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
-                                今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈今天的天气很好，哈哈哈
-                            </p>
-                        </div>
-                        <div class="comment-item">
+                        <div class="comment-item" v-for="commentItem in item.comments">
                             <div class="row">
                                 <div class="col-xs-10">
                                     <a href="javascript:;">leo</a>
@@ -151,16 +138,116 @@
 
 
 </div>
+{%endraw%}
 <script>
     //console.log(test);
    //发送ajax获取数据
 var vm = new Vue({
     el:"#app",
     data:{
-        list:[]
+        list:[],
+        message:'',
+        editingById:'',
+        commentingById:''
     },
     
     methods:{
+        //提交评论
+        sendComment(id,index){
+            console.log(this.$refs.commentMessage[index].value);
+            $.ajax({
+                url:"/api/comment",
+                method:"post",
+                data:{
+                    id:id,
+                    content:this.$refs.commentMessage[index].value
+                },
+                success:(data) => {
+                    console.log(data.comment)
+                    if(data.status === 0){
+                        console.log(this.list[index].comments);
+                        this.list[index].comments.unshift(data.comment);
+                    }else{
+                        console.log(data);
+                    }
+                },
+                error:function(err){
+                    console.log(arr);
+                }
+            })
+        },
+        //展开收缩获取评论
+        commenting(id,index,showComment){
+            console.log(id)
+            //请求评论
+            $.ajax({
+                url:"/api/getComment",
+                method:"post",
+                data:{
+                    id:id
+                },
+                success:(data) => {
+                    console.log(data)
+                    if(data.status === 0){
+                        this.$set(this.list[index],"comments",data.comments);
+                    }else{
+                        console.log(data);
+                    }
+                },
+                error:function(err){
+                    console.log(arr);
+                }
+            })
+
+
+            Vue.set(this.list[index],'showComment',!showComment)
+        },
+        //编辑留点
+        editing(id){
+            this.editingById = id;
+        },
+        //删除点子
+        deleteMessage:function(id,index){
+            $.ajax({
+                url:"/api/deleteMessageById",
+                method:"get",
+                data:{
+                    id:id
+                },
+                success:(data) => {
+                    if(data.status === 0){
+                        this.list.splice(index,1);
+                    }else{
+                        console.log(data);
+                    }
+                },
+                error:function(err){
+                    console.log(arr);
+                }
+            })
+        },
+        //发送点子
+        sendMessage:function(){
+            $.ajax({
+                url:"/api/message",
+                method:"post",
+                data:{
+                    content:this.message
+                },
+                success:(data) => {
+                    console.log(data)
+                    if(data.status === 0){
+                        this.list.unshift(data.content);
+                    }else{
+                        console.log(data);
+                    }
+                },
+                error:function(err){
+                    console.log(arr);
+                }
+            })
+        },
+        //初始获取所有点子
         getlist:function(){
             $.ajax({
                 url:"/api/getMessage",

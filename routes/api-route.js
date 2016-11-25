@@ -7,9 +7,15 @@ var router = express.Router();
 var handle = require("../model/handle");
 var M = handle.M;
 
-function getDate() {
+function getYMD() {
     var date = new Date();
     return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+
+}
+
+function getHMS() {
+    var date = new Date();
+    return date.getHours()+":"+(date.getMinutes())+":"+date.getSeconds();
 
 }
 
@@ -87,18 +93,23 @@ router.post("/message",function(req,res){
     var message = req.body.content;
     var userName = req.cookies["mb-userName"];
     //发过来后，获取到cookie，根据cookie确定用户名
-
-    var messageColletion =  db.collection("message");
-    messageColletion.insertOne({
+    var content = {
         id:random()+"",
+        agree:0,
+        unAgree:0,
+        commentNum:0,
         userName:userName,
         message:message,
-        date:getDate()
-    })
+        date:getYMD()+" " + getHMS()
+    }
+
+    var messageColletion =  db.collection("message");
+    messageColletion.insertOne(content)
         .then(function(){
             res.json({
                 status: 0,
-                message: "提交成功"
+                message: "提交成功",
+                content:content
             })
         })
         .catch(function(err){
@@ -114,18 +125,21 @@ router.post("/comment",function(req,res){
     var userName = req.cookies["mb-userName"];
     //发过来后，获取到cookie，根据cookie确定用户名
 
-    var messageColletion =  db.collection("comment");
-    messageColletion.insertOne({
+    var comment = {
         id:random()+"",
         userName:userName,
         cooment:message,
-        date:getDate(),
+        date:getYMD()+" " + getHMS(),
         message_id:id
-    })
+    }
+
+    var messageColletion =  db.collection("comment");
+    messageColletion.insertOne(comment)
         .then(function(){
             res.json({
                 status: 0,
-                message: "提交成功"
+                message: "提交成功",
+                comment: comment
             })
         })
         .catch(function(err){
@@ -134,6 +148,32 @@ router.post("/comment",function(req,res){
 
 
 })
+
+//获取评论
+router.post("/getComment",function(req,res){
+    var id = req.body.id;
+    //发过来后，获取到cookie，根据cookie确定用户名
+
+    var commentColletion =  db.collection("comment");
+    commentColletion.find({
+        message_id:id
+    }).
+    toArray()
+        .then(function(data){
+            res.json({
+                status: 0,
+                message: "获取评论成功",
+                comments:data
+            })
+        })
+        .catch(function(err){
+            throw err;
+        })
+
+
+})
+
+
 //更新留言
 router.post("/updateMessage",function(req,res){
     var message = req.body.content;

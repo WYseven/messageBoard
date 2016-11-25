@@ -35,11 +35,7 @@ router.use(["/users-list"],function(req,res,next){
 
 //首页
 router.get("/",function (req,res) {
-    res.render("index",{
-        test:{
-            a:1
-        }
-    });
+    res.render("index");
 });
 
 router.get("/login",function (req,res) {
