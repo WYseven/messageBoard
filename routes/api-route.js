@@ -65,6 +65,7 @@ router.post("/reg",function (req,res) {
                 usersColletion.insertOne({
                     userName:userName
                 }).then(function(){
+                    res.setHeader("Set-Cookie",'mb-userName='+userName + ";domain=localhost;path=/;expires=" + new Date(2016,12,12).toUTCString());
                     res.json({
                         status: 0,
                         message:"注册成功"
@@ -128,7 +129,7 @@ router.post("/comment",function(req,res){
     var comment = {
         id:random()+"",
         userName:userName,
-        cooment:message,
+        comment:message,
         date:getYMD()+" " + getHMS(),
         message_id:id
     }
@@ -232,8 +233,18 @@ router.get("/getMessage",function(req,res){
 
     M("message").find().toArray()
         .then(function(data){
-            console.log(data[0]);
-            res.json(data)
+            //获取到所有消息对应的评论
+            var getCommentsArr = data.map(function(item,index){
+                return M("comment").find({message_id:item.id}).toArray();
+            });
+            Promise.all(getCommentsArr).then(function(commentArr){
+                commentArr.forEach(function(item,index){
+                    data[index].commentNum = item.length;
+                })
+                res.json(data)
+            })
+
+
         })
         .catch(function(err){
             throw err;

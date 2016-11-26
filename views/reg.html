@@ -6,6 +6,8 @@
 
     <link rel="stylesheet" href="/bootstrap.min.css">
     <link rel="stylesheet" href="/site.min.css">
+    <script src="vue.js"></script>
+    <script src="jquery-3.1.1.min.js"></script>
     <style>
         .content{
             margin-top: 20px;
@@ -18,6 +20,7 @@
 </head>
 <body>
 {% include 'header.html' %}
+{%raw%}
 <div class="content">
     <div class="container">
         <div class="row">
@@ -26,21 +29,56 @@
                 <div style="border: 1px dashed #ccc"></div>
                 <div class="form-group">
                     <label for="exampleInputEmail1">用户名</label>
-                    <input autocomplete="off" type="text" class="form-control" id="exampleInputEmail1" placeholder="用户名">
+                    <input autocomplete="off" v-model="userName" type="text" class="form-control" id="exampleInputEmail1" placeholder="用户名">
+                    <span>{{tip}}</span>
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword1">Password</label>
-                    <input autocomplete="off" type="password" class="form-control" id="exampleInputPassword1" placeholder="密码">
+                    <label for="exampleInputPassword1" >Password</label>
+                    <input autocomplete="off" v-model="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="密码">
                 </div>
                 <!--<div class="checkbox">
                     <label>
                         <input type="checkbox"> Check me out
                     </label>
                 </div>-->
-                <button type="button" class="btn btn-default">注册</button>
+                <button type="button" @click="reg" class="btn btn-default">注册</button>
             </div>
         </div>
     </div>
 </div>
+{%endraw%}
+<script>
+    new Vue({
+        el:".content",
+        data:{
+            userName:'',
+            password:'',
+            tip:''
+        },
+        methods:{
+            reg(){
+                $.ajax({
+                    url:"/api/reg",
+                    method:"post",
+                    data:{
+                        userName:this.userName,
+                        password:this.password
+                    },
+                    success:(data) => {
+                        console.log(data)
+                        if(data.status === 0){
+                            window.location.href = '/';
+                        }else{
+                            this.tip = data.message;
+                        }
+                    },
+                    error:function(err){
+                        console.log(arr);
+                    }
+                })
+            }
+        }
+    })
+</script>
 </body>
 </html>

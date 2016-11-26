@@ -15,6 +15,8 @@
             background: #fff;
         }
     </style>
+    <script src="vue.js"></script>
+    <script src="jquery-3.1.1.min.js"></script>
 </head>
 <body>
 {% include 'header.html' %}
@@ -26,21 +28,65 @@
                 <div style="border: 1px dashed #ccc"></div>
                 <div class="form-group">
                     <label for="exampleInputEmail1">用户名</label>
-                    <input autocomplete="off" type="text" class="form-control" id="exampleInputEmail1" placeholder="用户名">
+                    <input autocomplete="off"
+                           type="text"
+                           class="form-control"
+                           id="exampleInputEmail1"
+                           placeholder="用户名"
+                           v-model="userName"
+                    >
                 </div>
                 <div class="form-group">
                     <label for="exampleInputPassword1">Password</label>
-                    <input autocomplete="off" type="password" class="form-control" id="exampleInputPassword1" placeholder="密码">
+                    <input
+                            autocomplete="off"
+                            type="password"
+                            class="form-control"
+                            id="exampleInputPassword1"
+                            placeholder="密码"
+                            v-model="password"
+                    />
                 </div>
                 <!--<div class="checkbox">
                     <label>
                         <input type="checkbox"> Check me out
                     </label>
                 </div>-->
-                <button type="button" class="btn btn-default">登录</button>
+                <button @click="login" type="button" class="btn btn-default">登录</button>
             </div>
         </div>
     </div>
 </div>
+<script>
+    new Vue({
+        el:".content",
+        data:{
+            userName:'',
+            password:''
+        },
+        methods:{
+            login(){
+                $.ajax({
+                    url:"/api/login",
+                    method:"post",
+                    data:{
+                        userName:this.userName,
+                        password:this.password
+                    },
+                    success:(data) => {
+                        if(data.status === 0){
+                            window.location.href = '/';
+                        }else{
+                            console.log(data);
+                        }
+                    },
+                    error:function(err){
+                        console.log(arr);
+                    }
+                })
+            }
+        }
+    })
+</script>
 </body>
 </html>

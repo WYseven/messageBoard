@@ -9,9 +9,35 @@
                 <li class="hidden-sm hidden-md"><a href="/users-list" target="_blank">点子用户</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right hidden-sm">
-                <li><a href="/login">登录</a></li>
-                <li><a href="/reg">注册</a></li>
+                {% if userName.length %}
+                    <li><a href="javasript:;">{{userName}}</a></li>
+                    <li><a href="javascript:;" id="loginOut">退出</a></li>
+                {% endif %}
+                {% if !userName.length %}
+                    <li><a href="/login">登录</a></li>
+                    <li><a href="/reg">注册</a></li>
+
+                {% endif %}
+
+
             </ul>
         </div>
     </div>
 </div>
+<script>
+    $("#loginOut").on("click",function(){
+        $.ajax({
+            url:"/api/exit",
+            success:(data) => {
+                if(data.status === 0){
+                    window.location.href = '/';
+                }else{
+                    console.log(data);
+                }
+            },
+            error:function(err){
+                console.log(arr);
+            }
+        })
+    })
+</script>

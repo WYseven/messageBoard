@@ -3,13 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+    <link rel="stylesheet" href="/bootstrap.min.css">
+    <link rel="stylesheet" href="/site.min.css">
+    <script src="jquery-3.1.1.min.js"></script>
+    <style>
+        .content{
+            margin-top: 20px;
+            background: #f8f8f8;
+        }
+        .content .container .col-xs-4{
+            background: #fff;
+        }
+    </style>
 </head>
 <body>
-    <h1>用户列表</h1>
-    <ul>
-        {% for item in list %}
-            <li>用户名为:{{item.userName}}</li>
-        {% endfor %}
-    </ul>
+{% include 'header.html' %}
+<div class="content">
+    <div class="container">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>用户名</th>
+                <th>备注</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in userList %}
+                <tr class="active">
+                    <td>1</td>
+                    <td>{{item.userName}}</td>
+                    <td>此用户比较活跃</td>
+                    <td>
+                        <button type="button" class="btn btn-default btn-sm">删除</button>
+                    </td>
+                </tr>
+            {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
 </body>
 </html>
