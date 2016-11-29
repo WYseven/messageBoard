@@ -89,6 +89,44 @@ router.get("/exit",function(req,res){
     })
 })
 
+router.post('/agree',function(req,res){
+    var id = req.body.id;
+    var messageColletion =  db.collection("message");
+
+    //先找到之前的agree数，然后累加
+
+    messageColletion.findOne({id:id}).then(function(data){
+        messageColletion.updateOne({id:id},{$set:{agree:++data.agree}},{upsert:true}).then(function(data){
+            console.log(data);
+            res.json({
+                status:0,
+                message:"点赞成功"
+            })
+        })
+    })
+
+
+})
+
+router.post('/unAgree',function(req,res){
+    var id = req.body.id;
+    var messageColletion =  db.collection("message");
+
+    //先找到之前的agree数，然后累加
+
+    messageColletion.findOne({id:id}).then(function(data){
+        messageColletion.updateOne({id:id},{$set:{unAgree:++data.unAgree}},{upsert:true}).then(function(data){
+            console.log(data);
+            res.json({
+                status:0,
+                message:"成功踩"
+            })
+        })
+    })
+
+
+})
+
 //留言
 router.post("/message",function(req,res){
     var message = req.body.content;

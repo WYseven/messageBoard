@@ -24,6 +24,48 @@ var vm = new Vue({
             })
         },
         methods:{
+            unAgreeHandle(item){
+
+                $.ajax({
+                    url:"/api/unAgree",
+                    method:"post",
+                    data:{
+                        id:item.id
+                    },
+                    success:(data) => {
+                        if(data.status === 0){
+                            ++item.unAgree;
+                        }else{
+                            console.log(data);
+                        }
+                    },
+                    error:function(err){
+                        console.log(arr);
+                    }
+                })
+            },
+            //顶
+            agreeHandle(item){
+
+                $.ajax({
+                    url:"/api/agree",
+                    method:"post",
+                    data:{
+                        id:item.id
+                    },
+                    success:(data) => {
+                        if(data.status === 0){
+                            ++item.agree;
+                        }else{
+                            console.log(data);
+                        }
+                    },
+                    error:function(err){
+                        console.log(arr);
+                    }
+                })
+
+            },
             //提交评论
             sendComment(id,index){
                 $.ajax({

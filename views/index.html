@@ -55,12 +55,15 @@
         .edtor-content {
             margin:0px 15px 10px;
         }
+        [v-cloak]{
+            display: none;
+        }
     </style>
 </head>
 <body>
 {% include 'header.html' %}
 {%raw%}
-<div class="content" :a="list.a" id="app">
+<div class="content" v-cloak id="app">
     <div class="container">
         <div class="bs-example">
             <h3>休息片刻，写下你的好点子：</h3>
@@ -85,8 +88,8 @@
                         {{item.message}}
                     </p>
                     <p class="text-right handle-options">
-                        <a href="javascript:;">踩[{{item.agree}}]</a>
-                        <a href="javascript:;">顶[{{item.unAgree}}]</a>
+                        <a href="javascript:;" @click="unAgreeHandle(item)">踩[{{item.unAgree}}]</a>
+                        <a href="javascript:;" @click="agreeHandle(item)">顶[{{item.agree}}]</a>
                         <a href="javascript:;"  @click="deleteMessage(item.id,index)">删除</a>
                         <a href="javascript:;" @click="editing(item.id)">编辑</a>
                         <a href="javascript:;" @click="commenting(item.id,index,item.showComment)">评论[{{item.commentNum}}]</a>
